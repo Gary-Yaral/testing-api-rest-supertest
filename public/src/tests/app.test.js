@@ -5,19 +5,23 @@ const User = require('../model/user')
 require('../db/mongo')
 const { userDataTest } = require('../constants') 
 
-beforeEach(async() => {
-  await User.deleteMany()
-})
 
 describe('test GET "/user"', () => {
-  test('recieve all data', async () => {
+  beforeEach(async() => {
+    await User.deleteMany({})
+  })
+  test('all data was received', async () => {
      let response = await api.post('/api/create').send(userDataTest)
      expect(response.status).toBe(200)
-     console.log(response.body)
   })
 
-})
+  test('return all data', async () => {
+    let response = await api.get('/api/get-all').send()
+    expect(response.status).toBe(200)
+ })
 
-afterAll(() => {
-  require('mongoose').connection.close()
+  
+  afterAll(() => {
+    require('mongoose').connection.close()
+  })
 })
